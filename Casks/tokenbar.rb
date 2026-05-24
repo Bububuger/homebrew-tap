@@ -20,8 +20,8 @@
 #   tbar schema --json | jq .schema.dataWindow
 
 cask "tokenbar" do
-  version "1.4.0"
-  sha256 "a1b6f08c498218cdc33fc9a978492a2f41a372fca91c08121c7a09d3e37f9900"
+  version "1.4.1"
+  sha256 "6f3d9d27e14a0f5d4dc988f21c14c94aa0b82e9f9e731085f572937788e7d8a7"
 
   url "https://github.com/Bububuger/tokenbar/releases/download/v#{version}/TokenBar-#{version}.dmg"
   name "TokenBar"
@@ -39,6 +39,17 @@ cask "tokenbar" do
   # Embedded CLI — symlinked onto $PATH so `tbar` works from any shell.
   # The path inside the .app is produced by script/release.sh step [4/6].
   binary "#{appdir}/TokenBar.app/Contents/MacOS/tbar"
+
+  # Strip `com.apple.quarantine` so the embedded `tbar` CLI isn't silently
+  # killed by Gatekeeper on first invocation. The .app GUI flow gets a
+  # one-time Gatekeeper prompt, but the CLI binary has no UI to surface it —
+  # before this hook, `tbar help` would exit 0 with no output for a brand
+  # new install. Failure is non-fatal (older OSes / no xattr binary etc.).
+  postflight do
+    system_command "/usr/bin/xattr",
+                   args: ["-r", "-d", "com.apple.quarantine", "#{appdir}/TokenBar.app"],
+                   must_succeed: false
+  end
 
   zap trash: [
     "~/Library/Application Support/com.javis.TokenBar",
