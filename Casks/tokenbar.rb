@@ -19,8 +19,8 @@
 #   tbar schema --json | jq .schema.dataWindow
 
 cask "tokenbar" do
-  version "1.8.10"
-  sha256 "338f25c3e9f1cf3985c16efe088ecdf25531ded5f4c9a9421b5f9e957f89538c"
+  version "1.8.11"
+  sha256 "bddf3b47cc8cd8299ec5f84f4d5e66dd730d9d50f339021c10e720c8915b39d5"
 
   url "https://github.com/Bububuger/tokenbar/releases/download/v#{version}/TokenBar-#{version}.dmg"
   name "TokenBar"
@@ -58,8 +58,9 @@ cask "tokenbar" do
   ]
 
   caveats <<~EOS
-    TokenBar reads the local logs that Claude Code / Codex / Gemini / Cursor
-    (etc.) already write under your home directory. Nothing is ever uploaded.
+    TokenBar reads local agent logs and keeps its index on this Mac. It has no
+    telemetry or TokenBar cloud sync. Optional Cursor account usage sync is
+    off by default and contacts Cursor only after you explicitly enable it.
 
     Quick start:
       open -a TokenBar          # launch menu-bar app
